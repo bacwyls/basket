@@ -1,10 +1,11 @@
 # basket
 
+basket allows the creator of a room to share images with the others in the room.
+its an experimental app, and is intented as an MVP for a 'rooms' integrated urbit app
+
 ## Desk
 
-The desk currently has the minimum amount of files necessary to distribute an application and should be distributable immediately. Any further Hoon development should happen here.
-
-TODO: Add further documentation on beginning Hoon development
+Basic ames communications and state consensus for members of a room.
 
 ## UI
 
