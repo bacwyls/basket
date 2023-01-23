@@ -1,5 +1,5 @@
 :~  title+'basket'
-    info+'An Urbit app that does great things'
+    info+'share images with your room'
     color+0xff.ffff
     image+'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/basket_1f9fa.png'
 ::    glob-http+['https://bootstrap.urbit.org/glob-0v5.hurm4.ejod5.ngg9h.iub9i.n1j7o.glob' 0v5.hurm4.ejod5.ngg9h.iub9i.n1j7o]

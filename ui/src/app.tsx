@@ -61,39 +61,83 @@ export function App() {
         mark: 'basket-action',
         json: {'set-image':imageInput.value}
       });
+
+      imageInput.value='';
     }
 
   return (
-    <main className="flex items-center justify-center max-h-screen">
+    <main className="flex items-center justify-center"
+      style={{
+        maxHeight:'100vh'
+      }}
+    >
     {!hasRealm || !inRoom ? 
       <div>
-      {!hasRealm && <p>sorry, you need Realm to use 🧺basket</p>}
-      {!inRoom && <p>you need to be in a room to use 🧺basket. please exit basket and open it again when you're in a room. </p>}
+      {!hasRealm && <p>sorry, you need Realm to use 🧺 basket</p>}
+      {!inRoom && <p>you need to be in a room to use 🧺 basket. please exit basket and open it again when you're in a room. </p>}
       </div>
     : (
-      <div className="w-full p-1">
-        <img src={image} 
-          className='pb-1 w-full max-h-screen'
-          />
-        {isRoomCreator &&
-        <div className=""
+      <div 
+          className="items-center text-center input-box-wrap"
           style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignSelf: 'flex-end',
-            justifyContent: 'flex-start',
+            height:'100vh',
+            width:'100vw',
+          }}
+      >
+      
+           {image==='' ? (
+            <p
+            style={{
+              margin: '50% auto'
+            }}
+            >please set an image</p>
+           ) : (
+            <img src={image}
+              style={{
+                height:'100vh',
+                objectFit:'contain'  
+              }}
+              className=''
+              />
+           )
+           }
+
+        <div
+          className="input-box"
+          style={{
+            position: 'fixed',
+            bottom: 5,
+            // left: 5,
             width:'100%',
+
           }}
         >
-          <input id={"image-input"} type="text"
-              className="w-full p-2 bg-white border border-black"
-              placeholder="image url"
-            />
-            <button className="hover:cursor-pointer ml-2 py-2 px-4 font-bold border border-black"
-                        onClick={pokeBasket}
-                  >set</button>
+          <div className="pt-1 m-4 "
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignSelf: 'flex-end',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <input id={"image-input"} type="text"
+                className="w-full p-2 bg-white border border-black"
+                placeholder="image url"
+                onKeyDown={(e: any) => {
+                  if (e.key == 'Enter') {
+                    pokeBasket()
+                  }
+              }}
+              />
+              <button className="hover:cursor-pointer ml-2 py-2 px-4 font-bold border border-black bg-white text-black"
+                onClick={() => {
+                  pokeBasket()
+                }}
+              >
+                set
+              </button>
+          </div>
         </div>
-       }
       </div>
     ) }
     </main>
