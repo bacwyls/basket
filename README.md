@@ -1,11 +1,24 @@
 # basket
 
-basket allows the creator of a room to share images with the others in the room.
+basket allows members of a room to share images with each other.
 its an experimental app, and is intented as an MVP for a 'rooms' integrated urbit app
 
 ## Desk
 
-Basic ames communications and state consensus for members of a room.
+mvp for interactive state consensus for members of a room.
+
+There's one agent, :basket,
+it has one piece of state, `image` which is just a url
+
+it has one poke, `[%set-image image=cord]`
+with the correct permissions, this poke will change the local state and publish on a /frontend subscription.
+
+depending on who the poke is from (is src.bowl myself? is src.bowl in my room? is src.bowl the creator of my room?), different actions are taken.
+
+the effect of this is that non-creator room-members relay their pokes through the creator to the room.
+this makes sure everyone has the same image regardless of latency.
+
+to integrate with rooms, :basket uses a single scry into the local `:rooms-v2` agent.
 
 ## UI
 
