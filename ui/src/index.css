@@ -16,3 +16,16 @@ main {
     transition: 0.2s ease;
     opacity:1;
 }
+
+#image-input {
+    background-color: var(--rlm-window-color, #FFF);
+    color: var(--rlm-text-color, #000);
+}
+#image-input-button {
+    background-color: var(--rlm-window-color, #FFF);
+    color: var(--rlm-text-color, #000);
+}
+
+img {
+    margin: auto;
+}

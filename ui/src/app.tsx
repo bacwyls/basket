@@ -56,6 +56,9 @@ export function App() {
   function pokeBasket() {
 
     const imageInput = document.getElementById('image-input')! as HTMLInputElement;
+
+    if (imageInput.value ==='') return;
+
     api.poke({
         app: 'basket',
         mark: 'basket-action',
@@ -82,7 +85,7 @@ export function App() {
       </div>
     : (
       <div 
-          className="items-center text-center input-box-wrap"
+          className="flex items-center text-center input-box-wrap"
           style={{
             height:'100vh',
             width:'100vw',
@@ -90,10 +93,7 @@ export function App() {
       >
       
            {image==='' ? (
-            <p
-            style={{
-              margin: '50% auto'
-            }}
+            <p className="m-auto"
             >please set an image</p>
            ) : (
             <img src={image}
@@ -125,7 +125,7 @@ export function App() {
             }}
           >
             <input id={"image-input"} type="text"
-                className="w-full p-2 bg-white border border-black"
+                className="w-full p-2 border"
                 placeholder="image url"
                 onKeyDown={(e: any) => {
                   if (e.key == 'Enter') {
@@ -133,7 +133,7 @@ export function App() {
                   }
               }}
               />
-              <button className="hover:cursor-pointer ml-2 py-2 px-4 font-bold border border-black bg-white text-black"
+              <button id={"image-input-button"} className="hover:cursor-pointer ml-2 py-2 px-4 border"
                 onClick={() => {
                   pokeBasket()
                 }}

@@ -71,17 +71,36 @@
           u.current-rid
         ::
         ?~  current-room  `this
-        ?.  =(src.bowl creator.u.current-room)
+        ?.  (~(has in present.u.current-room) src.bowl)
+            `this
+        :: src.bowl is in our room
+        ::
+        ?.  =(src.bowl our.bowl)
+          :: other attempting to set our
+          :: if src is creator: set and update frontend
+          ?:  =(src.bowl creator.u.current-room)
+            =.  image  image.act
+            :_  this  [update-frontend ~]
+          :: if we are creator: set, update frontend, and poke everyone
+          ?:  =(our.bowl creator.u.current-room)
+            =.  image  image.act
+            :_  this
+            :-  update-frontend
+            (poke-room:hc u.current-room [%set-image image])
+          :: else: do nothing
           `this
-        :: src.bowl is our rooms creator
+        :: us attempting to set self
+        :: creator can set-self, everyone else has to fwd to creator
         ::
-        =.  image  image.act
-        ::
+        :: if we are creator: set, update frontend, and poke everyone
+        ?:  =(our.bowl creator.u.current-room)
+          =.  image  image.act
+          :_  this
+          :-  update-frontend
+          (poke-room:hc u.current-room [%set-image image])
+        :: else: fwd to creator
         :_  this
-        :-  update-frontend
-        :: iff we're the creator, poke everyone else in the room
-        ?.  =(our.bowl creator.u.current-room)  ~
-        (poke-room:hc u.current-room [%set-image image])
+          (poke-creator:hc u.current-room [%set-image image])
       ==
     ==
   ==
@@ -103,6 +122,13 @@
 |_  bowl=bowl:gall
 ++  update-frontend
   (fact:agentio basket-action+!>([%set-image image]) ~[/frontend])
+++  poke-creator
+  |=  [=room:rooms act=action:store]
+  :_  ~
+  %+  poke:pass:agentio
+      [creator.room %basket]
+      :-  %basket-action
+      !>  act
 ++  poke-room
   |=  [=room:rooms act=action:store]
   ^-  (list card)
