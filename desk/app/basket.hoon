@@ -100,7 +100,7 @@
           (poke-room:hc u.current-room [%set-image image])
         :: else: fwd to creator
         :_  this
-          (poke-creator:hc u.current-room [%set-image image])
+          (poke-creator:hc u.current-room [%set-image image.act])
       ==
     ==
   ==
