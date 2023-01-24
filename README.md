@@ -5,8 +5,6 @@ its an experimental app, and is intented as an MVP for a 'rooms' integrated urbi
 
 ## Desk
 
-mvp for interactive state consensus for members of a room.
-
 There's one agent, :basket,
 it has one piece of state, `image` which is just a url
 
