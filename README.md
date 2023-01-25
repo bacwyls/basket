@@ -1,7 +1,7 @@
 # basket
 
 basket allows members of a room to share images with each other.
-its an experimental app, and is intented as an MVP for a 'rooms' integrated urbit app
+its an experimental app intended as an MVP for a 'rooms' integrated urbit app
 
 ## Desk
 
