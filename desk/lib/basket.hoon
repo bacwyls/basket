@@ -18,6 +18,12 @@
      %-  pairs
       :~
       ['image' %s image.act]
+      :-  'meta' 
+        ?~  meta.act  ~
+        :-  %a
+        %+  turn  ~(tap in tags.u.meta.act)
+          |=  tag=term
+          [%s tag]
       ==
     ==
   --
@@ -49,7 +55,19 @@
     ++  decode
       %-  of
       :~
-        [%set-image so]
+        [%set-image set-image]
+      ==
+    ++  set-image
+      %-  ot
+      :~  
+          [%image so]
+          [%meta (mu meta)]
+      ==
+    ++  meta
+      %-  ot
+      :~  
+          [%tags (as so)]
+          [%time di]
       ==
     --
   --

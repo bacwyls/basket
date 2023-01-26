@@ -62,7 +62,10 @@ export function App() {
     api.poke({
         app: 'basket',
         mark: 'basket-action',
-        json: {'set-image':imageInput.value}
+        json: {'set-image':{
+              'image':imageInput.value,
+              'meta':null,
+        }}
       });
 
       imageInput.value='';
