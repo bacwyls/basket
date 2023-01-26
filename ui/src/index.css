@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-main {
+/* main {
     background-color: var(--rlm-window-color, #FFF);
     color: var(--rlm-text-color, #000);
-}
+} */
 
 .input-box-wrap .input-box {
     transition: 0.2s ease;
@@ -16,7 +16,7 @@ main {
     transition: 0.2s ease;
     opacity:1;
 }
-
+/* 
 #image-input {
     background-color: var(--rlm-window-color, #FFF);
     color: var(--rlm-text-color, #000);
@@ -24,8 +24,13 @@ main {
 #image-input-button {
     background-color: var(--rlm-window-color, #FFF);
     color: var(--rlm-text-color, #000);
-}
+} */
 
 img {
     margin: auto;
 }
+
+/* .tag-row * div, .tag-row .tag-row-input{
+    background-color: var(--rlm-window-color, #FFF);
+    color: var(--rlm-text-color, #000);
+} */

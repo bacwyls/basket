@@ -14,10 +14,19 @@
     ^-  [cord json]
     :-  -.act
     ?-  -.act
+    %tag-image
+     %-  pairs
+      :~
+      ['image' %s image.act]
+      ['tag' %s tag.act]
+      ==
     %set-image
      %-  pairs
       :~
       ['image' %s image.act]
+      :-  'time' 
+        ?~  meta.act  ~
+        (sect:enjs time.u.meta.act)
       :-  'meta' 
         ?~  meta.act  ~
         :-  %a
@@ -56,6 +65,13 @@
       %-  of
       :~
         [%set-image set-image]
+        [%tag-image tag-image]
+      ==
+    ++  tag-image
+      %-  ot
+      :~  
+          [%image so]
+          [%tag so]
       ==
     ++  set-image
       %-  ot

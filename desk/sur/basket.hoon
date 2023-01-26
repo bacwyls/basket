@@ -14,5 +14,6 @@
 +$  action
   $%
     [%set-image image=cord meta=(unit metadata)]
+    [%tag-image image=cord tag=term]
   ==
 --

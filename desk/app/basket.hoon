@@ -53,9 +53,9 @@
     ::
       %basket-action
     =/  act  !<(action:store vase)
-    ?-  -.act
+    :: ?-  -.act
       :: ::
-          %set-image
+          :: %set-image
       =/  rom
         .^(view:rooms %gx [(scot %p our.bowl) %rooms-v2 (scot %da now.bowl) %session %noun ~])
       ?+  -.rom  !!
@@ -102,7 +102,7 @@
         :_  this
           (poke-creator:hc u.current-room act)
       ==
-    ==
+    :: ==
   ==
 ++  on-watch
   |=  =path
@@ -126,8 +126,15 @@
   |=  [act=action:store]
   ^-  images:store
   ?-  -.act
-  %set-image
+      %tag-image
+  =/  old-meta=(unit metadata:store)
+      (~(get by images) image.act)
+  ?~  old-meta  images
+  %+  ~(put by images)
+  image.act
+  [(~(put in tags.u.old-meta) tag.act) now.bowl]
   ::
+      %set-image
   =/  new-meta=metadata:store
     ?~  meta.act
       [*(set term) now.bowl]
