@@ -14,6 +14,17 @@
     ^-  [cord json]
     :-  -.act
     ?-  -.act
+    %forget-image
+     %-  pairs
+      :~
+      ['image' %s image.act]
+      ==
+    %untag-image
+     %-  pairs
+      :~
+      ['image' %s image.act]
+      ['tag' %s tag.act]
+      ==
     %tag-image
      %-  pairs
       :~
@@ -65,13 +76,20 @@
       %-  of
       :~
         [%set-image set-image]
+        [%forget-image forget-image]
         [%tag-image tag-image]
+        [%untag-image tag-image]
       ==
     ++  tag-image
       %-  ot
       :~  
           [%image so]
           [%tag so]
+      ==
+    ++  forget-image
+      %-  ot
+      :~  
+          [%image so]
       ==
     ++  set-image
       %-  ot

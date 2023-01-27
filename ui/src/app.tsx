@@ -124,12 +124,12 @@ export function App() {
       {!inRoom && <p>you need to be in a room to use 🧺 basket. please exit basket and open it again when you're in a room. </p>}
       </div>
     : (
-      <div>
+      <div className='w-full'>
       {isLiveView ? (
       <LiveView metaImage={metaImage} />
       ) : (
         
-      <RepoView />
+      <RepoView basketEvent={basketEvent} />
         )}
         </div>
     ) }

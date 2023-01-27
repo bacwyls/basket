@@ -1,5 +1,5 @@
 :: basket:
-::  share files in a room
+::  share files in a room...
 ::
 /-  store=basket, rooms=rooms-v2
 /+  basket
@@ -28,7 +28,13 @@
     io    ~(. agentio bowl)
 ::
 ++  on-fail   on-fail:def
-++  on-load  on-load:def
+++  on-load
+  |=  old-state=vase
+  ^-  (quip card _this)
+  =/  old  !<(versioned-state old-state)
+  ?-  -.old
+    %0  `this(state old)
+  ==
 ++  on-arvo
   |=  [=wire =sign-arvo]
   ^-  (quip card _this)
@@ -76,56 +82,52 @@
     ::
       %basket-action
     =/  act  !<(action:store vase)
-    :: ?-  -.act
-      :: ::
-          :: %set-image
-      =/  rom
-        .^(view:rooms %gx [(scot %p our.bowl) %rooms-v2 (scot %da now.bowl) %session %noun ~])
-      ?+  -.rom  !!
-        %session
-        =/  current-rid=(unit @t)
-          current.session-state.rom
-        ?~  current-rid
+    =/  rom
+      .^(view:rooms %gx [(scot %p our.bowl) %rooms-v2 (scot %da now.bowl) %session %noun ~])
+    ?+  -.rom  !!
+      %session
+      =/  current-rid=(unit @t)
+        current.session-state.rom
+      ?~  current-rid
+        `this
+      :: we're in a room
+      ::
+      =/  current-room
+        %-  ~(get by rooms.session-state.rom)
+        u.current-rid
+      ::
+      ?~  current-room  `this
+      ?.  (~(has in present.u.current-room) src.bowl)
           `this
-        :: we're in a room
-        ::
-        =/  current-room
-          %-  ~(get by rooms.session-state.rom)
-          u.current-rid
-        ::
-        ?~  current-room  `this
-        ?.  (~(has in present.u.current-room) src.bowl)
-            `this
-        :: src.bowl is in our room
-        ::
-        ?.  =(src.bowl our.bowl)
-          :: other attempting to set our
-          :: if src is creator: set and update frontend
-          ?:  =(src.bowl creator.u.current-room)
-            =.  images  (put-image:hc act)
-            :_  this  [(publish act) ~]
-          :: if we are creator: set, update frontend, and poke everyone
-          ?:  =(our.bowl creator.u.current-room)
-            =.  images  (put-image:hc act)
-            :_  this
-            :-  (publish act)
-            (poke-room:hc u.current-room act)
-          :: else: do nothing
-          `this
-        :: us attempting to set self
-        :: creator can set-self, everyone else has to fwd to creator
-        ::
+      :: src.bowl is in our room
+      ::
+      ?.  =(src.bowl our.bowl)
+        :: other attempting to set our
+        :: if src is creator: set and update frontend
+        ?:  =(src.bowl creator.u.current-room)
+          =.  images  (put-image:hc act)
+          :_  this  [(publish act) ~]
         :: if we are creator: set, update frontend, and poke everyone
         ?:  =(our.bowl creator.u.current-room)
           =.  images  (put-image:hc act)
           :_  this
           :-  (publish act)
           (poke-room:hc u.current-room act)
-        :: else: fwd to creator
+        :: else: do nothing
+        `this
+      :: us attempting to set self
+      :: creator can set-self, everyone else has to fwd to creator
+      ::
+      :: if we are creator: set, update frontend, and poke everyone
+      ?:  =(our.bowl creator.u.current-room)
+        =.  images  (put-image:hc act)
         :_  this
-          (poke-creator:hc u.current-room act)
-      ==
-    :: ==
+        :-  (publish act)
+        (poke-room:hc u.current-room act)
+      :: else: fwd to creator
+      :_  this
+        (poke-creator:hc u.current-room act)
+    ==
   ==
 ++  on-watch
   |=  =path
@@ -149,6 +151,24 @@
   |=  [act=action:store]
   ^-  images:store
   ?-  -.act
+      %forget-image
+  ?.  =(src.bowl our.bowl)
+    images
+  =/  old-meta=(unit metadata:store)
+      (~(get by images) image.act)
+  ?~  old-meta  images
+  %-  ~(del by images)
+  image.act
+      %untag-image
+  ?.  =(src.bowl our.bowl)
+    images
+  =/  old-meta=(unit metadata:store)
+      (~(get by images) image.act)
+  ?~  old-meta  images
+  %+  ~(put by images)
+  image.act
+  [(~(del in tags.u.old-meta) tag.act) now.bowl]
+  ::
       %tag-image
   =/  old-meta=(unit metadata:store)
       (~(get by images) image.act)

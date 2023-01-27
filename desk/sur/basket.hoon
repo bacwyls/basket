@@ -15,5 +15,7 @@
   $%
     [%set-image image=cord meta=(unit metadata)]
     [%tag-image image=cord tag=term]
+    [%untag-image image=cord tag=term]
+    [%forget-image image=cord]
   ==
 --

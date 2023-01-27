@@ -98,7 +98,7 @@ export const LiveView : React.FC<IMetaImage> = (props:IMetaImage) => {
         justifyContent: 'flex-start',
       }}
     >
-      <div className="bg-white tag-row-input inline-block border mx-4 ">
+      <div className="flex flex-row bg-white tag-row-input inline-block border mx-4 ">
         <input id={"tag-input"} type="text"
           onKeyDown={(e: any) => {
             if (e.key == 'Enter') {
@@ -118,29 +118,14 @@ export const LiveView : React.FC<IMetaImage> = (props:IMetaImage) => {
         </span>
       </div>
       {metaImage.tags.length > 0 && 
-        <div className="inline-block">
+        <div className="inline-block flex flex-row overflow-x-scroll">
           {metaImage.tags.map((tag:string) => (
             <div
               key={tag}
               className="bg-white inline-block border p-1 px-2 mr-1"
             >
-              {/* x / delete icon
-              <div
-                className="inline"
-                // onClick={handleKillTag}
-                id={tag}
-              >
-              <svg xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 mr-1 inline-block hover:cursor-pointer"
-                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                strokeWidth="2"
-              
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              </div> */}
-
-              <span className=' text-gray-600'>
+            
+              <span className=' text-gray-600 whitespace-nowrap'>
                 {tag}
               </span>
             </div>
