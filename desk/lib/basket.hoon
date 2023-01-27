@@ -27,7 +27,7 @@
       :-  'time' 
         ?~  meta.act  ~
         (sect:enjs time.u.meta.act)
-      :-  'meta' 
+      :-  'tags' 
         ?~  meta.act  ~
         :-  %a
         %+  turn  ~(tap in tags.u.meta.act)

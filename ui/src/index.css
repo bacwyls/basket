@@ -38,6 +38,6 @@ img {
 .view-picker {
     transition: 0.2s ease;
     opacity:0;
-    position:absolute;
+    position:fixed;
     top:0
 }

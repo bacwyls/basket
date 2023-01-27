@@ -16,7 +16,7 @@ interface MetaImage{
 
 export function App() {
 
-  const [metaImage, setMetaImage] = useState<MetaImage>({image:'', tags:['test', '123', 'weras'], time:0});
+  const [metaImage, setMetaImage] = useState<MetaImage>({image:'', tags:[], time:0});
   const [basketEvent, setBasketEvent] = useState<any>({});
   const [isLiveView, setIsLiveView] = useState(true);
   const [hasRealm, setHasRealm] = useState(true);
@@ -97,7 +97,7 @@ export function App() {
       }}
     >
 
-    <div className="view-picker bg-white flex flex-row w-1/4 text-center border">
+    <div className="view-picker bg-white flex flex-row w-1/4 text-center border z-10">
       <div className={`flex-1 hover:cursor-pointer p-1 ${isLiveView ? 'font-bold' : ''}`}
         onClick={()=> {
           setIsLiveView(true)

@@ -3,8 +3,8 @@
     color+0xff.ffff
     image+'https://0x0.st/oFHB.png'
 ::    glob-http+['https://bootstrap.urbit.org/glob-0v5.hurm4.ejod5.ngg9h.iub9i.n1j7o.glob' 0v5.hurm4.ejod5.ngg9h.iub9i.n1j7o]
-::    glob-ames+[~sampel-bacwyl-samweg 0v0]
-    glob-http+['https://bwyl.nyc3.digitaloceanspaces.com/basket/basket-0.0.1-0v5.jg5bb.10f1g.hkjrt.a1778.grts2.glob' 0v5.jg5bb.10f1g.hkjrt.a1778.grts2]
+    glob-ames+[~sampel-bacwyl-samweg 0v0]
+::    glob-http+['https://bwyl.nyc3.digitaloceanspaces.com/basket/basket-0.0.1-0v5.jg5bb.10f1g.hkjrt.a1778.grts2.glob' 0v5.jg5bb.10f1g.hkjrt.a1778.grts2]
     base+'basket'
     version+[0 0 1]
     website+'https://github.com'

@@ -28,7 +28,6 @@
     io    ~(. agentio bowl)
 ::
 ++  on-fail   on-fail:def
-++  on-peek   on-peek:def
 ++  on-load  on-load:def
 ++  on-arvo
   |=  [=wire =sign-arvo]
@@ -44,6 +43,30 @@
   |=  [=path]
   `this
 ++  on-agent  on-agent:def
+++  on-peek
+  |=  =path
+  ^-  (unit (unit cage))
+  ?+    path  (on-peek:def path)
+    [%x %images ~]
+    =/  jimg=json
+      =,  enjs:format
+      %-  pairs
+      %+  turn
+        ~(tap by images)
+        |=  [image=cord meta=metadata:store]
+        ^-  [cord json]
+        :-  image
+        %-  pairs
+        :~
+          ['time' (sect:enjs time.meta)]
+          :-  'tags' 
+            :-  %a
+            %+  turn  ~(tap in tags.meta)
+              |=  tag=term
+              [%s tag]
+        ==
+      ``json+!>(jimg)
+  ==
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
