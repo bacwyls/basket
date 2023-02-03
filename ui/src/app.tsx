@@ -40,7 +40,7 @@ export function App() {
       let upd = e['tag-image'];
       if(metaImage.image!==upd.image) return;
       let newTags : string[] = metaImage.tags.slice();
-      newTags.push(upd.tag)
+      newTags.unshift(upd.tag)
       let mim : MetaImage = {
         image:metaImage.image,
         tags: newTags,
@@ -89,6 +89,17 @@ export function App() {
     init();
   }, []);
 
+  useEffect(()=>{
+    
+    const viewPicker = document.getElementById('view-picker')!;
+    if(isLiveView) {
+      viewPicker.classList.remove("override-transparency");
+      return
+    }
+      viewPicker.classList.add("override-transparency");
+
+  }, [isLiveView])
+
 
   return (
     <main className="flex items-center justify-center"
@@ -97,7 +108,9 @@ export function App() {
       }}
     >
 
-    <div className="view-picker bg-white flex flex-row w-1/4 text-center border z-10">
+    <div className="view-picker bg-white flex flex-row w-1/4 text-center border z-10"
+      id="view-picker"
+      >
       <div className={`flex-1 hover:cursor-pointer p-1 ${isLiveView ? 'font-bold' : ''}`}
         onClick={()=> {
           setIsLiveView(true)
@@ -114,25 +127,25 @@ export function App() {
       </div>
     </div>
 
-    {!hasRealm || !inRoom ? 
-      <div className="flex items-center"
+    {/* {!hasRealm || !inRoom ?  */}
+      {/* <div className="flex items-center"
         style={{
           height:'100vh',
         }}
-      >
-      {!hasRealm && <p>sorry, you need Realm to use 🧺 basket</p>}
-      {!inRoom && <p>you need to be in a room to use 🧺 basket. please exit basket and open it again when you're in a room. </p>}
-      </div>
-    : (
+      > */}
+      {/* {!hasRealm && <p>sorry, you need Realm to use 🧺 basket</p>} */}
+      {/* {!inRoom && <p>you need to be in a room to use 🧺 basket. please exit basket and open it again when you're in a room. </p>} */}
+      {/* </div> */}
+    {/* : ( */}
       <div className='w-full'>
       {isLiveView ? (
       <LiveView metaImage={metaImage} />
       ) : (
         
-      <RepoView basketEvent={basketEvent} />
+      <RepoView basketEvent={basketEvent} setIsLiveView={setIsLiveView} />
         )}
         </div>
-    ) }
+    {/* ) } */}
     </main>
   );
 }

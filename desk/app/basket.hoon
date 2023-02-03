@@ -3,7 +3,7 @@
 ::
 /-  store=basket, rooms=rooms-v2
 /+  basket
-/+  default-agent, dbug, agentio
+/+  default-agent, verb, dbug, agentio
 =,  format
 :: ::
 |%
@@ -16,6 +16,7 @@
   ==
 +$  card     card:agent:gall
 --
+%+  verb  &
 %-  agent:dbug
 =|  state-0
 =*  state  -
@@ -83,8 +84,9 @@
       %basket-action
     =/  act  !<(action:store vase)
     ::
-    =/  current-room=room:rooms-v2
-        scry-room
+    =/  current-room=room:rooms
+        scry-room:hc
+    ::
     ?.  (~(has in present.current-room) src.bowl)
         `this
     :: src.bowl is in our room
@@ -204,7 +206,8 @@
 ++  scry-room
   :: if no room, or if not in a room, set current-room to a bunt with self in present and creator
   ^-  room:rooms
-  =/  desks  .^((set desk) %cd %)
+  =/  desks
+      .^((set desk) %cd [(scot %p our.bowl) %base (scot %da now.bowl) ~]) 
   ?.  (~(has in desks) %realm)
     filler-room
   =/  rom
@@ -214,29 +217,30 @@
     =/  current-rid=(unit @t)
       current.session-state.rom
     ?~  current-rid
-      `this
+      filler-room
     :: we're in a room
     ::
     =/  get-room
       %-  ~(get by rooms.session-state.rom)
       u.current-rid
     ::
-    ?~  get-room  filler-room
+    ?~  get-room
+      filler-room
     u.get-room
   ==
 ++  filler-room
   =|  ourset=(set ship)
     =.  ourset
       (~(put in ourset) our.bowl)
-    :*
-      'rod'
-      our.bowl
-      our.bowl
-      %public
-      'title'
-      ourset
-      ourset
-      6
-      ~
-    ==
+  :*
+    'basket-filler-room'
+    our.bowl
+    our.bowl
+    %public
+    'title'
+    ourset
+    ourset
+    6
+    ~
+  ==
 -- 

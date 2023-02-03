@@ -100,6 +100,7 @@ export const LiveView : React.FC<IMetaImage> = (props:IMetaImage) => {
     >
       <div className="flex flex-row bg-white tag-row-input inline-block border mx-4 ">
         <input id={"tag-input"} type="text"
+          autoComplete='off'
           onKeyDown={(e: any) => {
             if (e.key == 'Enter') {
               pokeBasketTag()
@@ -113,12 +114,15 @@ export const LiveView : React.FC<IMetaImage> = (props:IMetaImage) => {
         <span
           className="pl-4 pr-2 inline-block hover:cursor-pointer text-gray-500"
           onClick={pokeBasketTag}
+          style={{
+            lineHeight:'2rem'
+          }}
         >
           +
         </span>
       </div>
       {metaImage.tags.length > 0 && 
-        <div className="inline-block flex flex-row overflow-x-scroll">
+        <div className="inline-block flex flex-row overflow-x-scroll mr-4">
           {metaImage.tags.map((tag:string) => (
             <div
               key={tag}
@@ -145,6 +149,7 @@ export const LiveView : React.FC<IMetaImage> = (props:IMetaImage) => {
       <input id={"image-input"} type="text"
           className="w-full p-2 border"
           placeholder="image url"
+          autoComplete='off'
           onKeyDown={(e: any) => {
             if (e.key == 'Enter') {
               pokeBasket()

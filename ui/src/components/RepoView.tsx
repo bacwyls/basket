@@ -16,11 +16,12 @@ interface MetaImage{
 
 interface IRepoView{
   basketEvent: any;
+  setIsLiveView: any;
 }
 
 
 export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
-    let {basketEvent} = props;
+    let {basketEvent, setIsLiveView} = props;
 
     const [images, setImages] = useState<MetaImage[]>(new Array<MetaImage>)
 
@@ -116,7 +117,7 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
     <div
     className='text-center'
     style={{
-      height:'calc(100vh - 50px)',
+      height:'calc(100vh - 40px)',
       marginTop:'50px'
     }}
     >
@@ -179,6 +180,7 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
                             meta:image.meta,
                         }}
                       });
+                      setIsLiveView(true);
                     }}
                   >
                     share
@@ -258,6 +260,7 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
       <input id={"search-input"} type="text"
           className="flex-1 p-2 border"
           placeholder="tags, go, here"
+          autoComplete='off'
           onKeyDown={(e: any) => {
             if (e.key == 'Enter') {
               searchImages()
