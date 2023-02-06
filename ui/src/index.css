@@ -12,6 +12,10 @@ main .input-box {
     opacity:0;
 }
 
+.override-transparency {
+    opacity:1 !important;
+}
+
 main:hover .input-box, main:hover .view-picker {
     transition: 0.2s ease;
     opacity:1;

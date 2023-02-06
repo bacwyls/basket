@@ -3,7 +3,7 @@
 ::
 /-  store=basket, rooms=rooms-v2
 /+  basket
-/+  default-agent, dbug, agentio
+/+  default-agent, verb, dbug, agentio
 =,  format
 :: ::
 |%
@@ -16,6 +16,7 @@
   ==
 +$  card     card:agent:gall
 --
+%+  verb  &
 %-  agent:dbug
 =|  state-0
 =*  state  -
@@ -82,52 +83,48 @@
     ::
       %basket-action
     =/  act  !<(action:store vase)
-    =/  rom
-      .^(view:rooms %gx [(scot %p our.bowl) %rooms-v2 (scot %da now.bowl) %session %noun ~])
-    ?+  -.rom  !!
-      %session
-      =/  current-rid=(unit @t)
-        current.session-state.rom
-      ?~  current-rid
+    ::
+    =/  current-room=room:rooms
+        scry-room:hc
+    ::
+    ?.  (~(has in present.current-room) src.bowl)
         `this
-      :: we're in a room
-      ::
-      =/  current-room
-        %-  ~(get by rooms.session-state.rom)
-        u.current-rid
-      ::
-      ?~  current-room  `this
-      ?.  (~(has in present.u.current-room) src.bowl)
-          `this
-      :: src.bowl is in our room
-      ::
-      ?.  =(src.bowl our.bowl)
-        :: other attempting to set our
-        :: if src is creator: set and update frontend
-        ?:  =(src.bowl creator.u.current-room)
-          =.  images  (put-image:hc act)
-          :_  this  [(publish act) ~]
-        :: if we are creator: set, update frontend, and poke everyone
-        ?:  =(our.bowl creator.u.current-room)
-          =.  images  (put-image:hc act)
-          :_  this
-          :-  (publish act)
-          (poke-room:hc u.current-room act)
-        :: else: do nothing
-        `this
-      :: us attempting to set self
-      :: creator can set-self, everyone else has to fwd to creator
-      ::
+    :: src.bowl is in our room
+    ::
+    ?.  =(src.bowl our.bowl)
+      :: other attempting to set our
+      :: if src is creator: set and update frontend
+      ?:  =(src.bowl creator.current-room)
+        =.  images  (put-image:hc act)
+        :_  this  [(publish act) ~]
       :: if we are creator: set, update frontend, and poke everyone
-      ?:  =(our.bowl creator.u.current-room)
+      ?:  =(our.bowl creator.current-room)
         =.  images  (put-image:hc act)
         :_  this
         :-  (publish act)
-        (poke-room:hc u.current-room act)
-      :: else: fwd to creator
+        (poke-room:hc current-room act)
+      :: else: do nothing
+      `this
+    :: we are poking ourself
+    ::
+    :: dont forward untag or forget, just apply the action
+    ?:  ?|  =(-.act %forget-image)
+            =(-.act %untag-image)
+        ==
+      =.  images  (put-image:hc act)
       :_  this
-        (poke-creator:hc u.current-room act)
-    ==
+      [(publish act) ~]
+    ::
+    :: creator can set-self, everyone else has to fwd to creator
+    :: if we are creator: set, update frontend, and poke everyone
+    ?:  =(our.bowl creator.current-room)
+      =.  images  (put-image:hc act)
+      :_  this
+      :-  (publish act)
+      (poke-room:hc current-room act)
+    :: else: fwd to creator
+    :_  this
+      (poke-creator:hc current-room act)
   ==
 ++  on-watch
   |=  =path
@@ -214,4 +211,44 @@
         [ship %basket]
         :-  %basket-action
         !>  act
+++  scry-room
+  :: if no room, or if not in a room, set current-room to a bunt with self in present and creator
+  ^-  room:rooms
+  =/  desks
+      .^((set desk) %cd [(scot %p our.bowl) %base (scot %da now.bowl) ~]) 
+  ?.  (~(has in desks) %realm)
+    filler-room
+  =/  rom
+    .^(view:rooms %gx [(scot %p our.bowl) %rooms-v2 (scot %da now.bowl) %session %noun ~])
+  ?+  -.rom  !!
+    %session
+    =/  current-rid=(unit @t)
+      current.session-state.rom
+    ?~  current-rid
+      filler-room
+    :: we're in a room
+    ::
+    =/  get-room
+      %-  ~(get by rooms.session-state.rom)
+      u.current-rid
+    ::
+    ?~  get-room
+      filler-room
+    u.get-room
+  ==
+++  filler-room
+  =|  ourset=(set ship)
+    =.  ourset
+      (~(put in ourset) our.bowl)
+  :*
+    'basket-filler-room'
+    our.bowl
+    our.bowl
+    %public
+    'title'
+    ourset
+    ourset
+    6
+    ~
+  ==
 -- 
