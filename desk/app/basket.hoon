@@ -105,9 +105,17 @@
         (poke-room:hc current-room act)
       :: else: do nothing
       `this
-    :: us attempting to set self
-    :: creator can set-self, everyone else has to fwd to creator
+    :: we are poking ourself
     ::
+    :: dont forward untag or forget, just apply the action
+    ?:  ?|  =(-.act %forget-image)
+            =(-.act %untag-image)
+        ==
+      =.  images  (put-image:hc act)
+      :_  this
+      [(publish act) ~]
+    ::
+    :: creator can set-self, everyone else has to fwd to creator
     :: if we are creator: set, update frontend, and poke everyone
     ?:  =(our.bowl creator.current-room)
       =.  images  (put-image:hc act)
