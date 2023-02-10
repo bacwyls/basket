@@ -1,5 +1,5 @@
 :~  title+'basket'
-    info+'share images with your room'
+    info+'show off your meme collection'
     color+0xff.ffff
     image+'https://0x0.st/oFHB.png'
     glob-http+['https://bwyl.nyc3.digitaloceanspaces.com/basket/basket_0-1-0_0v6.20vfc.mm2b5.5bq6i.khdg3.01on7.glob' 0v6.20vfc.mm2b5.5bq6i.khdg3.01on7]

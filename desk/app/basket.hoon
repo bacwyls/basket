@@ -9,16 +9,22 @@
 |%
 +$  versioned-state
   $%  state-0
+      state-1
   ==
 +$  state-0  $:
   %0
   =images:store
   ==
++$  state-1  $:
+  %1
+  =images:store
+  latest=cord
+  ==
 +$  card     card:agent:gall
 --
 %+  verb  &
 %-  agent:dbug
-=|  state-0
+=|  state-1
 =*  state  -
 ^-  agent:gall
 =<
@@ -34,7 +40,10 @@
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
   ?-  -.old
-    %0  `this(state old)
+    %0
+      =.  images  images.old
+      `this
+    %1  `this(state old)
   ==
 ++  on-arvo
   |=  [=wire =sign-arvo]
@@ -57,20 +66,24 @@
     [%x %images ~]
     =/  jimg=json
       =,  enjs:format
-      %-  pairs
+      :-  %a
       %+  turn
         ~(tap by images)
         |=  [image=cord meta=metadata:store]
-        ^-  [cord json]
-        :-  image
+        ^-  json
         %-  pairs
         :~
+          ['url' %s image]
+          :-  'meta'
+          %-  pairs
+          :~
           ['time' (sect:enjs time.meta)]
           :-  'tags' 
             :-  %a
             %+  turn  ~(tap in tags.meta)
               |=  tag=term
               [%s tag]
+          ==
         ==
       ``json+!>(jimg)
   ==
@@ -95,11 +108,11 @@
       :: other attempting to set our
       :: if src is creator: set and update frontend
       ?:  =(src.bowl creator.current-room)
-        =.  images  (put-image:hc act)
+        =.  state  (take-action:hc act)
         :_  this  [(publish act) ~]
       :: if we are creator: set, update frontend, and poke everyone
       ?:  =(our.bowl creator.current-room)
-        =.  images  (put-image:hc act)
+        =.  state  (take-action:hc act)
         :_  this
         :-  (publish act)
         (poke-room:hc current-room act)
@@ -111,14 +124,14 @@
     ?:  ?|  =(-.act %forget-image)
             =(-.act %untag-image)
         ==
-      =.  images  (put-image:hc act)
+      =.  state  (take-action:hc act)
       :_  this
       [(publish act) ~]
     ::
     :: creator can set-self, everyone else has to fwd to creator
     :: if we are creator: set, update frontend, and poke everyone
     ?:  =(our.bowl creator.current-room)
-      =.  images  (put-image:hc act)
+      =.  state  (take-action:hc act)
       :_  this
       :-  (publish act)
       (poke-room:hc current-room act)
@@ -134,7 +147,9 @@
   ?+    path
     (on-watch:def path)
       [%frontend ~]
-    `this
+    :_  this
+    ?:  =(latest '')  ~
+    [(publish [%set-image latest (~(get by images) latest)]) ~]
   ==
 --
 :: ::
@@ -144,52 +159,63 @@
 ++  publish
   |=  [act=action:store]
   (fact:agentio basket-action+!>(act) ~[/frontend])
+++  take-action
+  |=  [act=action:store]
+  ^-  state-1
+  =.  latest
+    ?+  -.act  latest
+      %set-image
+    image.act
+    ==
+  =.  images
+    (put-image act)
+  state
 ++  put-image
   |=  [act=action:store]
   ^-  images:store
   ?-  -.act
-      %forget-image
-  ?.  =(src.bowl our.bowl)
-    images
-  =/  old-meta=(unit metadata:store)
-      (~(get by images) image.act)
-  ?~  old-meta  images
-  %-  ~(del by images)
-  image.act
-      %untag-image
-  ?.  =(src.bowl our.bowl)
-    images
-  =/  old-meta=(unit metadata:store)
-      (~(get by images) image.act)
-  ?~  old-meta  images
-  %+  ~(put by images)
-  image.act
-  [(~(del in tags.u.old-meta) tag.act) now.bowl]
-  ::
-      %tag-image
-  =/  old-meta=(unit metadata:store)
-      (~(get by images) image.act)
-  ?~  old-meta  images
-  %+  ~(put by images)
-  image.act
-  [(~(put in tags.u.old-meta) tag.act) now.bowl]
-  ::
-      %set-image
-  =/  new-meta=metadata:store
-    ?~  meta.act
-      [*(set term) now.bowl]
-    u.meta.act
-  =/  old-meta=(unit metadata:store)
-      (~(get by images) image.act)
-  ?~  old-meta
-    :: we have a new image
+        %forget-image
+    ?.  =(src.bowl our.bowl)
+      images
+    =/  old-meta=(unit metadata:store)
+        (~(get by images) image.act)
+    ?~  old-meta  images
+    %-  ~(del by images)
+    image.act
+        %untag-image
+    ?.  =(src.bowl our.bowl)
+      images
+    =/  old-meta=(unit metadata:store)
+        (~(get by images) image.act)
+    ?~  old-meta  images
     %+  ~(put by images)
     image.act
-    new-meta
-  :: we have a repeat image, merge metadata
+    [(~(del in tags.u.old-meta) tag.act) now.bowl]
+    ::
+        %tag-image
+    =/  old-meta=(unit metadata:store)
+        (~(get by images) image.act)
+    ?~  old-meta  images
     %+  ~(put by images)
     image.act
-    [(~(uni in tags.u.old-meta) tags.new-meta) time.u.old-meta]
+    [(~(put in tags.u.old-meta) tag.act) now.bowl]
+    ::
+        %set-image
+    =/  new-meta=metadata:store
+      ?~  meta.act
+        [*(set term) now.bowl]
+      u.meta.act
+    =/  old-meta=(unit metadata:store)
+        (~(get by images) image.act)
+    ?~  old-meta
+      :: we have a new image
+      %+  ~(put by images)
+      image.act
+      new-meta
+    :: we have a repeat image, merge metadata
+      %+  ~(put by images)
+      image.act
+      [(~(uni in tags.u.old-meta) tags.new-meta) time.u.old-meta]
   ==
 ++  poke-creator
   |=  [=room:rooms act=action:store]

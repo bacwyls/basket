@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Urbit from '@urbit/http-api';
-import { groupStoreAction } from '@urbit/api';
 import { LiveView } from './components/LiveView';
 import { RepoView } from './components/RepoView';
 
@@ -19,6 +18,9 @@ export function App() {
   const [metaImage, setMetaImage] = useState<MetaImage>({image:'', tags:[], time:0});
   const [basketEvent, setBasketEvent] = useState<any>({});
   const [isLiveView, setIsLiveView] = useState(true);
+  
+  // TODO visually indicate room session??
+  // TODO sub to rooms instead of scry??
   const [hasRealm, setHasRealm] = useState(true);
   const [inRoom, setInRoom] = useState(true);
   const [isRoomCreator, setIsRoomCreator] = useState(false);
@@ -63,8 +65,6 @@ export function App() {
           quit:(e:any)=>{console.log('basket quit', e)},
           err: (e:any)=>{console.log('basket err', e)}
       })
-
-     
 
       try {
         const gotRoomsSession = await api.scry({
@@ -126,17 +126,6 @@ export function App() {
         repo
       </div>
     </div>
-
-    {/* {!hasRealm || !inRoom ?  */}
-      {/* <div className="flex items-center"
-        style={{
-          height:'100vh',
-        }}
-      > */}
-      {/* {!hasRealm && <p>sorry, you need Realm to use 🧺 basket</p>} */}
-      {/* {!inRoom && <p>you need to be in a room to use 🧺 basket. please exit basket and open it again when you're in a room. </p>} */}
-      {/* </div> */}
-    {/* : ( */}
       <div className='w-full'>
       {isLiveView ? (
       <LiveView metaImage={metaImage} />
@@ -145,7 +134,6 @@ export function App() {
       <RepoView basketEvent={basketEvent} setIsLiveView={setIsLiveView} />
         )}
         </div>
-    {/* ) } */}
     </main>
   );
 }
