@@ -26,7 +26,7 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
     const [images, setImages] = useState<MetaImage[]>(new Array<MetaImage>)
 
 
-    useEffect(()=>{
+    useEffect(() => {
       let e:any = basketEvent;
       if(e['untag-image'] || e['forget-image']) {
         loadImages()
@@ -34,8 +34,6 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
     }, [basketEvent])
   
     useEffect(() => {
-     
-  
       loadImages();
     }, []);
 
@@ -45,26 +43,13 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
         path: '/images'
       });
 
-      let mims : MetaImage[] = new Array<MetaImage>;
-      for (var key in gotImages) {
-        let mim : MetaImage = {
-          url: key,
-          meta: {
-            tags:gotImages[key].tags,
-            time:gotImages[key].time,
-          }
-        }
-        mims.push(mim);
-      }
+      let mims : MetaImage[] = gotImages;
 
       mims.sort((a:MetaImage, b:MetaImage) => {
         return b.meta.time - a.meta.time;
       })
 
       setImages(mims);
-
-      // console.log(csv)
-      // download('metrics.csv', csv)
     }
 
     async function searchImages() {
@@ -72,7 +57,6 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
       let searchTags:string[];
       const searchInput = document.getElementById('search-input')! as HTMLInputElement;
 
-      // console.log('using searchinputvalue', searchInput.value)
       if (!searchInput.value) {
         loadImages();
         return;
@@ -88,16 +72,10 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
       });
 
       let mims : MetaImage[] = new Array<MetaImage>;
-      for (var key in gotImages) {
-        let mim : MetaImage = {
-          url: key,
-          meta: {
-            tags:gotImages[key].tags,
-            time:gotImages[key].time,
-          }
-        }
 
-        const found = mim.meta.tags.some(r=> searchTags.indexOf(r) >= 0)
+      for (var i=0; i< gotImages.length; i++) {
+        let mim : MetaImage = gotImages[i]
+        const found : Boolean = mim.meta.tags.some(r=> searchTags.indexOf(r) >= 0)
         if(found) {
           mims.push(mim);
         }
@@ -108,9 +86,6 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
       })
 
       setImages(mims);
-
-      // console.log(csv)
-      // download('metrics.csv', csv)
     }
 
   return (
@@ -121,20 +96,14 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
       marginTop:'50px'
     }}
     >
-     
-    {/* <p className=""
-    >
-      repo view
-    </p> */}
     <div className='w-full'>
-    {Object.keys(images).length > 0 && 
+    {images.length === 0  ? ( <p>theres nothing here...</p>) : (
         <div className="inline-block pb-20">
-          {images.slice(0,50).map((image:MetaImage) => (
+          {images.slice(0,50).map((image:MetaImage, imageIndex:any) => (
             <div
-              key={image.url}
+              key={imageIndex}
               className="mb-2 py-1"
             >
-
               <div
                 className="border"
                 style={{
@@ -183,7 +152,7 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
                       setIsLiveView(true);
                     }}
                   >
-                    share
+                    show
                   </div>
                 </div>
 
@@ -195,9 +164,9 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
                   maxWidth:'100%'
                 }}
                 >
-                {image.meta.tags.map((tag:string) => (
+                {image.meta.tags.map((tag:string, tagIndex:any) => (
                   <div
-                    key={tag}
+                    key={tagIndex}
                     className="flex flex-row flex-init bg-white inline-block border px-1 mr-1"
                   >
                     <div
@@ -212,7 +181,6 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
                           }}
                         });
                       }}
-                      id={tag}
                     >
                     <svg xmlns="http://www.w3.org/2000/svg"
                       className="h-3 w-3 mr-1 inline-block hover:cursor-pointer"
@@ -225,7 +193,6 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
                     </div>
 
                     <span className=' text-gray-600'
-                    
                       style={{
                         whiteSpace:'nowrap'
                       }}
@@ -237,12 +204,11 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
                 </div>
 
               </div>
-
               
             </div>
           ))}
         </div>
-      }
+      )}
       </div>
 
       <div className="pt-1 mt-1 w-full"
@@ -256,25 +222,25 @@ export const RepoView : React.FC<IRepoView> = (props:IRepoView) => {
         alignSelf: 'flex-end',
         justifyContent: 'flex-start',
       }}
-    >
-      <input id={"search-input"} type="text"
-          className="flex-1 p-2 border"
-          placeholder="tags, go, here"
-          autoComplete='off'
-          onKeyDown={(e: any) => {
-            if (e.key == 'Enter') {
-              searchImages()
-            }
-        }}
-        />
-        <button id={"image-input-button"} className=" bg-white hover:cursor-pointer ml-2 py-2 px-4 border"
-          onClick={() => {
-            searchImages()
+      >
+        <input id={"search-input"} type="text"
+            className="flex-1 p-2 border"
+            placeholder="tags, go, here"
+            autoComplete='off'
+            onKeyDown={(e: any) => {
+              if (e.key == 'Enter') {
+                searchImages()
+              }
           }}
-        >
-          search
-        </button>
-    </div>
+          />
+          <button id={"image-input-button"} className=" bg-white hover:cursor-pointer ml-2 py-2 px-4 border"
+            onClick={() => {
+              searchImages()
+            }}
+          >
+            search
+          </button>
+      </div>
     </div>
   );
 };
