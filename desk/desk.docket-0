@@ -4,7 +4,7 @@
     image+'https://0x0.st/oFHB.png'
     glob-http+['https://bwyl.nyc3.digitaloceanspaces.com/basket%2Fbasket-0.1.1-0v5.knsp5.ndgsu.as66h.epjve.c9qag.glob' 0v5.knsp5.ndgsu.as66h.epjve.c9qag]
     base+'basket'
-    version+[0 1 0]
-    website+'https://github.com'
+    version+[0 1 1]
+    website+'https://github.com/bacwyls/basket'
     license+'MIT'
 ==
