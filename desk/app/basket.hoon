@@ -239,12 +239,20 @@
         [ship %basket]
         :-  %basket-action
         !>  act
+++  is-desk-running
+  |=  =desk
+  ^-  ?
+  =/  =rock:tire:clay
+    .^(rock:tire:clay %cx /(scot %p our.bowl)//(scot %da now.bowl)/tire)
+  ?~  got-pebble=(~(get by rock) desk)  |
+  =(%live zest.u.got-pebble)
+++  is-agent-running
+  |=  agent=@tas
+  .^(? %gu /(scot %p our.bowl)/[agent]/(scot %da now.bowl))
 ++  scry-room
   :: if no room, or if not in a room, set current-room to a bunt with self in present and creator
   ^-  room:rooms
-  =/  desks
-      .^((set desk) %cd [(scot %p our.bowl) %base (scot %da now.bowl) ~]) 
-  ?.  (~(has in desks) %realm)
+  ?.  (is-agent-running %rooms-v2)
     filler-room
   =/  rom
     .^(view:rooms %gx [(scot %p our.bowl) %rooms-v2 (scot %da now.bowl) %session %noun ~])
@@ -266,8 +274,8 @@
   ==
 ++  filler-room
   =|  ourset=(set ship)
-    =.  ourset
-      (~(put in ourset) our.bowl)
+  =.  ourset
+    (~(put in ourset) our.bowl)
   :*
     'basket-filler-room'
     our.bowl
