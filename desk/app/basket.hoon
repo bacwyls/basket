@@ -2,7 +2,7 @@
 ::  share files in a room...
 ::
 /-  store=basket, rooms=rooms-v2
-/+  basket
+/+  basket, vita-client
 /+  default-agent, verb, dbug, agentio
 =,  format
 :: ::
@@ -22,11 +22,13 @@
   ==
 +$  card     card:agent:gall
 --
-%+  verb  &
-%-  agent:dbug
 =|  state-1
 =*  state  -
 ^-  agent:gall
+%-  %-  agent:vita-client
+      [& ~nodmyn-dosrux]
+%+  verb  &
+%-  agent:dbug
 =<
 |_  =bowl:gall
 +*  this  .
@@ -91,9 +93,6 @@
   |=  [=mark =vase]
   ^-  (quip card _this)
   ?+  mark  (on-poke:def mark vase)
-      %noun
-    `this
-    ::
       %basket-action
     =/  act  !<(action:store vase)
     ::
@@ -148,6 +147,9 @@
     (on-watch:def path)
       [%frontend ~]
     :_  this
+    %+  weld
+      :~  (active:vita-client bowl)
+      ==
     ?:  =(latest '')  ~
     [(publish [%set-image latest (~(get by images) latest)]) ~]
   ==
