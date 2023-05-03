@@ -248,7 +248,7 @@
   =(%live zest.u.got-pebble)
 ++  is-agent-running
   |=  agent=@tas
-  .^(? %gu /(scot %p our.bowl)/[agent]/(scot %da now.bowl))
+  .^(? %gu /(scot %p our.bowl)/[agent]/(scot %da now.bowl)/$)
 ++  scry-room
   :: if no room, or if not in a room, set current-room to a bunt with self in present and creator
   ^-  room:rooms
